@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123c35">
+<title>Bezon — Prototype</title>
+<style>
+:root{--green:#123c35;--mint:#e9f3ed;--cream:#f7f7f2;--ink:#17231f;--muted:#75817b;--orange:#f2a65a}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+.app{max-width:520px;margin:auto;min-height:100dvh;padding-bottom:86px;background:#fff}
+header{background:var(--green);color:white;padding:22px 18px 24px;border-radius:0 0 25px 25px}
+.top{display:flex;align-items:center;justify-content:space-between}.brand{font-size:27px;font-weight:850;letter-spacing:-1px}.brand span{color:#bde1c9}.tag{font-size:11px;opacity:.8;letter-spacing:1.5px}
+.iconbtn{border:1px solid #ffffff45;background:#ffffff16;color:#fff;border-radius:13px;padding:10px 12px;font-size:18px}
+h1{font-size:24px;line-height:1.25;margin:23px 0 7px}.sub{color:#d5e6dc;font-size:13px}
+.search{margin-top:18px;background:white;border-radius:14px;padding:12px 14px;display:flex;gap:8px;align-items:center;color:#87918b}
+.search input{border:0;outline:0;width:100%;font-size:14px;color:var(--ink)}
+main{padding:18px}.section-head{display:flex;justify-content:space-between;align-items:center;margin:5px 0 12px}.section-head h2{font-size:18px;margin:0}.tiny{font-size:12px;color:var(--muted)}
+.categories{display:flex;gap:9px;overflow:auto;padding:2px 0 13px;scrollbar-width:none}.chip{white-space:nowrap;border:1px solid #e3e8e4;background:#fff;color:#4f5e56;border-radius:30px;padding:9px 13px;font-size:12px}.chip.active{background:var(--green);color:white;border-color:var(--green)}
+.banner{background:var(--mint);border-radius:18px;padding:17px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:5px 0 23px}.banner strong{display:block;font-size:17px;line-height:1.3}.banner p{margin:6px 0 0;font-size:12px;color:#5e7166}.banner .art{font-size:43px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.product{border:1px solid #edf0ed;border-radius:17px;overflow:hidden;background:#fff}.pic{height:124px;background:#f0f3ee;display:flex;align-items:center;justify-content:center;font-size:49px;position:relative}.label{position:absolute;top:9px;left:9px;background:white;border-radius:7px;padding:4px 6px;font-size:9px;color:var(--green);font-weight:750}.pbody{padding:11px}.pname{font-size:13px;font-weight:700;min-height:35px}.pdesc{font-size:10px;color:var(--muted);margin:4px 0 9px}.price-row{display:flex;align-items:center;justify-content:space-between;gap:6px}.price{font-weight:800;font-size:16px}.add{border:0;border-radius:10px;background:var(--green);color:white;font-size:18px;width:33px;height:33px}.empty{padding:30px 12px;text-align:center;color:var(--muted);font-size:13px;grid-column:1/-1}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);display:flex;justify-content:space-around;background:#fff;border-top:1px solid #e8ece8;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:5}.nav{border:0;background:transparent;color:#829087;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;min-width:56px}.nav b{font-size:20px;font-weight:500}.nav.active{color:var(--green);font-weight:800}
+.count{display:inline-flex;background:var(--orange);color:#2c251b;border-radius:20px;padding:2px 6px;font-size:10px;margin-left:3px}
+.toast{position:fixed;bottom:83px;left:50%;transform:translateX(-50%);background:#17231f;color:white;border-radius:12px;padding:10px 15px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;z-index:10}.toast.show{opacity:1}
+.view{display:none}.view.active{display:block}.cart-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #edf0ed}.cart-emoji{font-size:28px;background:#f0f3ee;border-radius:12px;padding:9px}.cart-name{flex:1;font-size:13px;font-weight:700}.qty{display:flex;align-items:center;gap:8px}.qty button{border:1px solid #dce4de;background:white;border-radius:8px;width:27px;height:27px}
+.primary{width:100%;padding:14px;border:0;border-radius:13px;background:var(--green);color:white;font-weight:750;margin-top:16px}.note{font-size:11px;line-height:1.5;color:var(--muted);margin-top:13px}
+@media(min-width:480px){body{padding:16px 0}.app{border-radius:26px;overflow:hidden;box-shadow:0 10px 40px #20392d14}.bottom{bottom:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="top"><div><div class="brand">Be<span>z</span>on<span>.</span></div><div class="tag">SMART FINDS. EVERYDAY.</div></div><button class="iconbtn" onclick="showView('cart')" aria-label="Cart">🛍️ <span id="headCount"></span></button></div>
+ <h1>তোমার ঘরের জন্য<br>স্মার্ট পছন্দ।</h1><div class="sub">প্রয়োজনীয় জিনিস, সহজে এক জায়গায়।</div>
+ <div class="search">⌕ <input id="search" placeholder="পণ্য খুঁজুন..." oninput="renderProducts()"></div>
+</header>
+<main>
+ <section id="shopView" class="view active">
+  <div class="section-head"><h2>ক্যাটাগরি</h2><span class="tiny">Explore</span></div>
+  <div class="categories" id="categories"></div>
+  <div class="banner"><div><strong>ছোট জিনিস,<br>বড় সুবিধা ✨</strong><p>Bezon-এর প্রথম প্রোটোটাইপ</p></div><div class="art">🏡</div></div>
+  <div class="section-head"><h2 id="productsHeading">জনপ্রিয় পণ্য</h2><span class="tiny" id="productCount"></span></div>
+  <div class="grid" id="products"></div>
+ </section>
+ <section id="cartView" class="view">
+  <div class="section-head"><h2>তোমার কার্ট</h2><span class="tiny" id="cartCount"></span></div>
+  <div id="cartItems"></div><div id="cartTotal"></div>
+  <p class="note">এটি পরীক্ষামূলক প্রোটোটাইপ। এখানে কোনো আসল অর্ডার বা পেমেন্ট নেওয়া হয় না।</p>
+ </section>
+ <section id="ordersView" class="view">
+  <div class="section-head"><h2>আমার অর্ডার</h2></div>
+  <div style="text-align:center;padding:45px 10px"><div style="font-size:48px">📦</div><h3>এখনও কোনো অর্ডার নেই</h3><p class="tiny">এই প্রোটোটাইপে অর্ডার সিস্টেম পরে যোগ করা যাবে।</p><button class="primary" onclick="showView('shop')">পণ্য দেখুন</button></div>
+ </section>
+ <section id="profileView" class="view">
+  <div class="section-head"><h2>Bezon সম্পর্কে</h2></div>
+  <div class="banner"><div><strong>Bezon</strong><p>তোমার ব্যবসার প্রথম ধাপ।</p></div><div class="art">🌱</div></div>
+  <p style="font-size:14px;line-height:1.7">এটি Bezon-এর প্রথম ফ্রি মোবাইল প্রোটোটাইপ। পণ্যের নমুনা, কার্ট এবং ক্যাটাগরি পরীক্ষা করার জন্য তৈরি।</p>
+  <p class="note">বর্তমানে ডেমো পণ্য ও ডেমো দাম ব্যবহার করা হয়েছে। বাস্তব বিক্রির আগে নিজের পণ্য, সঠিক দাম, যোগাযোগ, ডেলিভারি ও অর্ডার ব্যবস্থাপনা যোগ করতে হবে।</p>
+ </section>
+</main>
+<nav class="bottom">
+ <button class="nav active" data-view="shop" onclick="showView('shop')"><b>⌂</b>হোম</button>
+ <button class="nav" data-view="cart" onclick="showView('cart')"><b>🛒</b>কার্ট <span id="navCount"></span></button>
+ <button class="nav" data-view="orders" onclick="showView('orders')"><b>▤</b>অর্ডার</button>
+ <button class="nav" data-view="profile" onclick="showView('profile')"><b>☻</b>প্রোফাইল</button>
+</nav>
+<div class="toast" id="toast">কার্টে যোগ হয়েছে</div>
+</div>
+<script>
+const products=[
+{id:1,name:"সিঙ্ক অর্গানাইজার",cat:"Home & Kitchen",price:249,emoji:"🧽",desc:"কিচেনের জিনিস গুছিয়ে রাখুন",label:"POPULAR"},
+{id:2,name:"ড্রয়ার অর্গানাইজার",cat:"Home & Kitchen",price:199,emoji:"🗂️",desc:"ছোট জিনিস রাখুন গুছিয়ে",label:""},
+{id:3,name:"স্টোরেজ বক্স",cat:"Storage",price:299,emoji:"📦",desc:"ঘরের জিনিস রাখার সহজ উপায়",label:"NEW"},
+{id:4,name:"ওয়াল হুক সেট",cat:"Home Decor",price:149,emoji:"🪝",desc:"দেয়ালে বাড়তি জায়গা তৈরি",label:""},
+{id:5,name:"কেবল অর্গানাইজার",cat:"Accessories",price:99,emoji:"🔌",desc:"তার রাখুন সুন্দরভাবে",label:""},
+{id:6,name:"বাথরুম শেলফ",cat:"Home & Kitchen",price:349,emoji:"🧴",desc:"দৈনন্দিন জিনিস এক জায়গায়",label:""}
+];
+let activeCat="All",cart={};
+const cats=["All","Home & Kitchen","Storage","Home Decor","Accessories"];
+function renderCats(){document.getElementById('categories').innerHTML=cats.map(c=>`<button class="chip ${activeCat===c?'active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}')">${c==='All'?'সব পণ্য':c}</button>`).join('')}
+function setCat(c){activeCat=c;renderCats();renderProducts()}
+function renderProducts(){
+ const q=document.getElementById('search').value.trim().toLowerCase();
+ const list=products.filter(p=>(activeCat==="All"||p.cat===activeCat)&&(p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)));
+ document.getElementById('productsHeading').textContent=activeCat==="All"?"জনপ্রিয় পণ্য":activeCat;
+ document.getElementById('productCount').textContent=list.length+" items";
+ document.getElementById('products').innerHTML=list.length?list.map(p=>`<article class="product"><div class="pic">${p.label?`<span class="label">${p.label}</span>`:''}${p.emoji}</div><div class="pbody"><div class="pname">${p.name}</div><div class="pdesc">${p.desc}</div><div class="price-row"><span class="price">₹${p.price}</span><button class="add" onclick="addToCart(${p.id})" aria-label="Add ${p.name}">+</button></div></div></article>`).join(''):'<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';
+}
+function addToCart(id){cart[id]=(cart[id]||0)+1;updateCounts();toast('কার্টে যোগ হয়েছে ✓')}
+function updateCounts(){let n=Object.values(cart).reduce((a,b)=>a+b,0);document.getElementById('headCount').textContent=n?`(${n})`:'';document.getElementById('navCount').innerHTML=n?`<span class="count">${n}</span>`:'';if(document.getElementById('cartView').classList.contains('active'))renderCart()}
+function renderCart(){
+ const entries=products.filter(p=>cart[p.id]);
+ document.getElementById('cartCount').textContent=entries.length+' পণ্য';
+ document.getElementById('cartItems').innerHTML=entries.length?entries.map(p=>`<div class="cart-item"><div class="cart-emoji">${p.emoji}</div><div class="cart-name">${p.name}<div class="tiny">₹${p.price} / টি</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${cart[p.id]}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`).join(''):'<div class="empty" style="display:block">কার্ট খালি। পছন্দের পণ্য যোগ করো।</div>';
+ const total=entries.reduce((s,p)=>s+p.price*cart[p.id],0);
+ document.getElementById('cartTotal').innerHTML=entries.length?`<div style="display:flex;justify-content:space-between;margin-top:18px;font-weight:800"><span>মোট (ডেমো)</span><span>₹${total}</span></div><button class="primary" onclick="toast('ডেমো: অর্ডার সিস্টেম এখনও চালু নয়')">অর্ডার পরীক্ষা করুন</button>`:'';
+}
+function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];updateCounts();renderCart()}
+function showView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById(v+'View').classList.add('active');document.querySelectorAll('.nav').forEach(e=>e.classList.toggle('active',e.dataset.view===v));if(v==='cart')renderCart();window.scrollTo({top:0,behavior:'smooth'})}
+let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1700)}
+renderCats();renderProducts();updateCounts();
+</script>
+</body>
+</html>
