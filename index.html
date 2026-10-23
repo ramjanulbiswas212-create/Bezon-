@@ -9,8 +9,7 @@
 :root{--green:#123c35;--mint:#e9f3ed;--cream:#f7f7f2;--ink:#17231f;--muted:#75817b;--orange:#f2a65a}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
 .app{max-width:520px;margin:auto;min-height:100dvh;padding-bottom:86px;background:#fff}
-header{background:var(--green);color:white;padding:22px 18px 24px;border-radius:0 0 25px 25px}
-.top{display:flex;align-items:center;justify-content:space-between}.brand{font-size:27px;font-weight:850;letter-spacing:-1px}.brand span{color:#bde1c9}.tag{font-size:11px;opacity:.8;letter-spacing:1.5px}
+header{background:var(--green);color:white;padding:22px 18px 24px;border-radius:0 
 .iconbtn{border:1px solid #ffffff45;background:#ffffff16;color:#fff;border-radius:13px;padding:10px 12px;font-size:18px}
 h1{font-size:24px;line-height:1.25;margin:23px 0 7px}.sub{color:#d5e6dc;font-size:13px}
 .search{margin-top:18px;background:white;border-radius:14px;padding:12px 14px;display:flex;gap:8px;align-items:center;color:#87918b}
@@ -96,9 +95,5 @@ function renderCart(){
  document.getElementById('cartTotal').innerHTML=entries.length?`<div style="display:flex;justify-content:space-between;margin-top:18px;font-weight:800"><span>মোট (ডেমো)</span><span>₹${total}</span></div><button class="primary" onclick="toast('ডেমো: অর্ডার সিস্টেম এখনও চালু নয়')">অর্ডার পরীক্ষা করুন</button>`:'';
 }
 function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];updateCounts();renderCart()}
-function showView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById(v+'View').classList.add('active');document.querySelectorAll('.nav').forEach(e=>e.classList.toggle('active',e.dataset.view===v));if(v==='cart')renderCart();window.scrollTo({top:0,behavior:'smooth'})}
-let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1700)}
-renderCats();renderProducts();updateCounts();
-</script>
-</body>
-</html>
+function showView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById(v+'View').classList.add('active');document.querySelectorAll('.nav').forEach(e=>e.classList.toggle('active',e.dataset.view===v));if(v==='cart')renderCart();window.scrollTo({
+ 
